@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
+
 using namespace std;
 
 struct Node {
@@ -9,20 +11,32 @@ struct Node {
     Node *next;
 };
 
+OutputList (Node *head) {
+    if (head != 0) {
+        cout << head->ID << endl;
+        return OutputList(head->next);
+    } else {
+        cout << "\n";
+    }
+}
+
 int main()
 {
     char key;
+    string str;
 
     Node *head = 0;
 
     while (key != 'x') {
 
         cout << endl;
-        cout << "1. Add new Student from begin" << endl;
-        cout << "2. Read elem" << endl;
-        cout << "3. Add elem after" << endl;
-        cout << "4. Add elem before" << endl;
-        cout << "5. Delete elem after" << endl;
+        cout << "1. Add new Student at begin of list" << endl;
+        cout << "2. Add new Student at the end of list" << endl;
+        cout << "3. Add new Student at i-position of list" << endl;
+        cout << "4. Change data on i-position" << endl;
+        cout << "5. Delete Student on i-position" << endl;
+        cout << "6. Show list" << endl;
+        cout << "7. Delete list and exit" << endl;
         cin >> key;
 
         switch (key) {
@@ -33,11 +47,39 @@ int main()
                 cout << "Input ID: " << endl;
                 (cin >> NewElem->ID).get();
                 cout << "Input FIO: " << endl;
-                cin.getline(NewElem->FIO, 200);
+                getline(cin, NewElem->FIO);
                 cout << "Input Group: " << endl;
                 cin >> NewElem->Group;
                 NewElem->next = head;
                 head = NewElem;
+                break;
+
+            }
+
+            case '2': {
+
+                Node *NewElem = new Node;
+                cout << "Input ID: " << endl;
+                (cin >> NewElem->ID).get();
+                cout << "Input FIO: " << endl;
+                getline(cin, NewElem->FIO);
+                cout << "Input Group: " << endl;
+                cin >> NewElem->Group;
+                NewElem->next = head;
+                head = NewElem;
+                break;
+            }
+
+            case '6': {
+
+                Node *OutElem = head;
+                while (OutElem) {
+                    //cout << "->" << OutElem->value << "(" << OutElem << ")";
+                    cout << "ID: " << OutElem->ID << endl;
+                    cout << "FIO: " << OutElem->FIO << endl;
+                    cout << "Group: " << OutElem->Group << endl;
+                    OutElem = OutElem->next;
+                }
                 break;
             }
 
