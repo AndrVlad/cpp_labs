@@ -11,21 +11,47 @@ struct Node {
     Node *next;
 };
 
-OutputList (Node *head) {
+void OutputList (Node *head) {
     if (head != 0) {
-        cout << head->ID << endl;
+        cout << "ID: " << head->ID << endl;
+        cout << "FIO: " << head->FIO << endl;
+        cout << "Group: " << head->Group << endl;
+        cout << "head = " << head << " head->next= " << head->next << endl;
         return OutputList(head->next);
     } else {
         cout << "\n";
     }
 }
 
+void AddInfo(Node *NewElem) {
+
+    cout << "Input ID: " << endl;
+    (cin >> NewElem->ID).get();
+    cout << "Input FIO: " << endl;
+    getline(cin, NewElem->FIO);
+    cout << "Input Group: " << endl;
+    cin >> NewElem->Group;
+}
+
+void ChangeInfo(Node *NewElem) {
+
+    cout << "Input ID: " << endl;
+    (cin >> NewElem->ID).get();
+    cout << "Input FIO: " << endl;
+    getline(cin, NewElem->FIO);
+    cout << "Input Group: " << endl;
+    cin >> NewElem->Group;
+}
+
+
 int main()
 {
     char key;
+    int n, counter = 0;
     string str;
 
     Node *head = 0;
+    Node *last = 0;
 
     while (key != 'x') {
 
@@ -37,6 +63,7 @@ int main()
         cout << "5. Delete Student on i-position" << endl;
         cout << "6. Show list" << endl;
         cout << "7. Delete list and exit" << endl;
+        cout << "Input x for exit" << endl;
         cin >> key;
 
         switch (key) {
@@ -44,43 +71,174 @@ int main()
             case '1': {
 
                 Node *NewElem = new Node;
-                cout << "Input ID: " << endl;
-                (cin >> NewElem->ID).get();
-                cout << "Input FIO: " << endl;
-                getline(cin, NewElem->FIO);
-                cout << "Input Group: " << endl;
-                cin >> NewElem->Group;
-                NewElem->next = head;
-                head = NewElem;
-                break;
+                Node *OldElem = head;
 
+                if (head == 0) {
+
+                    AddInfo(NewElem);
+                    NewElem->next = head;
+                    head = NewElem;
+
+                } else {
+
+                    while (head->next != 0) {
+                        head = head->next;
+                        cout << head;
+                    }
+
+                    AddInfo(NewElem);
+
+                    head->next = NewElem;
+                    NewElem->next = last;
+                    head = OldElem;
+
+                }
+                counter++;
+                break;
             }
 
             case '2': {
 
                 Node *NewElem = new Node;
-                cout << "Input ID: " << endl;
-                (cin >> NewElem->ID).get();
-                cout << "Input FIO: " << endl;
-                getline(cin, NewElem->FIO);
-                cout << "Input Group: " << endl;
-                cin >> NewElem->Group;
+
+                AddInfo(NewElem);
                 NewElem->next = head;
                 head = NewElem;
+                counter++;
+                break;
+
+            }
+
+            case '3': {
+
+                int n = 0;
+
+                Node *NextElem = head;
+                Node *CurrElem;
+                Node *NewElem = new Node;
+                cout << "Input i-num of element: " << endl;
+                cin >> n;
+
+                if (n > counter+1 || n == 0) {
+                    cout << "Error" << endl;
+                    break;
+                }
+
+                if (n == 1) {
+                    NewElem->next = head;
+                    head = NewElem;
+                    AddInfo(NewElem);
+                } else {
+
+                    for (int i = 0; i < n-1; i++) {
+                        NextElem = NextElem->next;
+                        cout << NextElem;
+                    }
+
+                    CurrElem = head;
+
+                    while (CurrElem->next != NextElem) {
+                        CurrElem = CurrElem->next;
+                    }
+                    cout << "Curr" << CurrElem << endl;
+                    NewElem->next = NextElem;
+                    AddInfo(NewElem);
+                    CurrElem->next = NewElem;
+                }
+
+                counter++;
+                break;
+            }
+
+            case '4': {
+
+                int n = 0;
+
+                Node *NextElem = head;
+                Node *CurrElem;
+                cout << "Input i-num of element, that change: " << endl;
+                cin >> n;
+
+                if (n == 1) {
+                    CurrElem = head;
+                    ChangeInfo(CurrElem);
+                } else {
+
+                    CurrElem = head;
+
+                    for (int i = 0; i < n-1; i++) {
+                        CurrElem = CurrElem->next;
+                        cout << CurrElem;
+                    }
+
+                    ChangeInfo(CurrElem);
+                }
+
+                break;
+            }
+
+            case '5': {
+
+                int n = 0;
+                cout << "Choose number of element for delete" << endl;
+                //cout << head;
+                cin >> n;
+
+                if (counter == 0) {
+
+                    cout << "Empty list " << endl;
+                    break;
+                } else if (!(n <= counter)) {
+                    cout << "Error " << endl;
+                    break;
+                }
+
+                Node *PrevElem = head;
+
+                if (n == 1) {
+                    head = PrevElem->next;
+                    delete PrevElem;
+                    break;
+                }
+
+                n -= 2;
+                cout << n;
+
+                    while (n != 0) {
+                        PrevElem = PrevElem->next;
+                        cout << n;
+                        cout << "Prev = " << PrevElem;
+                        cout << "Prev->next = " << PrevElem->next;
+                        n--;
+                   }
+
+
+                Node *DeleteElem = PrevElem->next;
+                PrevElem->next = DeleteElem->next;
+                delete DeleteElem;
                 break;
             }
 
             case '6': {
 
                 Node *OutElem = head;
-                while (OutElem) {
-                    //cout << "->" << OutElem->value << "(" << OutElem << ")";
-                    cout << "ID: " << OutElem->ID << endl;
-                    cout << "FIO: " << OutElem->FIO << endl;
-                    cout << "Group: " << OutElem->Group << endl;
-                    OutElem = OutElem->next;
-                }
+                OutputList(head);
                 break;
+            }
+
+            case '7': {
+
+                Node *CurrElem = head;
+                while (CurrElem != 0) {
+                    Node *Template = CurrElem;
+                    CurrElem = CurrElem->next;
+                    delete Template;
+                }
+
+                head = 0;
+                key = 'x';
+                break;
+
             }
 
         }
@@ -201,4 +359,15 @@ case '2': {
                 delete DeleteElem;
                 break;
             }
+
+
+            while (OutElem) {
+                    cout << "->" << OutElem->value << "(" << OutElem << ")";
+                    cout << "ID: " << OutElem->ID << endl;
+                    cout << "FIO: " << OutElem->FIO << endl;
+                    cout << "Group: " << OutElem->Group << endl;
+                    OutElem = OutElem->next;
+                }
+                break;
+
 */
