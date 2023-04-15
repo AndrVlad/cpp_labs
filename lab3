@@ -1,0 +1,199 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
+
+struct Student {
+    string fio;
+    int number;
+    Student *next;
+};
+
+struct Group {
+    string name;
+    int code;
+    Student* student;
+    Group* next;
+    Group* prev;
+};
+
+void AddStudent(Student **stud) {
+
+    Student *NewStud = new Student;
+    cout << "Введите ФИО студента:";
+    getline(cin, NewStud->fio);
+    cout << "Введите номер зачетки студента: ";
+    cin >> NewStud->number;
+
+    NewStud->next = *stud;
+    *stud = NewStud;
+
+    return;
+}
+
+void ShowStudent(Student *stud) {
+
+    Student *CurStud = stud;
+
+    while (CurStud) {
+
+        cout << "/t ФИО: " << CurStud->fio << endl;
+        cout << "/t Номер зачетки: " << CurStud->number << endl << endl;
+        CurStud = CurStud->next;
+    }
+
+    //while ()
+    return;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    char key;
+    int n, counter = 0;
+    string str, groupName;
+
+    Group *GrStart = new Group;
+    GrStart->next = GrStart;
+    GrStart->prev = GrStart;
+
+    while (key != 'x') {
+
+        cout << "\n меню:" << endl;
+        cout << "1. Добавить группу" << endl;
+        cout << "2. Удалить группу" << endl;
+        cout << "3. Добавить студента в группу" << endl;
+        cout << "4. Удалить студента из группы" << endl;
+        cout << "5. Изменить запись студента" << endl;
+        cout << "6. Вывести всю информацию" << endl;
+        cout << "7. Очистить всё" << endl;
+        cout << "8. Выйти" << endl;
+        cout << "Выберите действие: ";
+        cin >> key;
+
+        switch (key) {
+
+            case '1': {
+
+                Group *NewGr = new Group;
+                NewGr->next = GrStart->next;
+                NewGr->prev = GrStart;
+                NewGr->student = 0;
+                GrStart->next = NewGr->next;
+                GrStart->prev = NewGr;
+
+                cout << "Введите название группы: ";
+                (cin >> NewGr->name).get();
+                cout << "Введите код специальности: ";
+                cin >> NewGr->code;
+
+                break;
+            }
+
+            case '2': {
+
+
+                break;
+
+            }
+
+            case '3': {
+
+                bool find_flag = 0;
+
+                if (GrStart->next == GrStart) {
+                    cout << "Ошибка! Добавьте хотя бы одну группу" << endl;
+                } else {
+
+                    cout << "Введите название группы в которую надо добавить студента: ";
+                    (cin >> groupName).get();
+
+                    Group *CurGroup = GrStart->next;
+
+                    while (CurGroup != GrStart && find_flag == 0) {
+
+                        cout << "Группа найдена" << endl;
+
+                        if (CurGroup->name == groupName) {
+                            find_flag = 1;
+
+                            if (CurGroup->student != 0) {
+                                AddStudent(&(CurGroup->student));
+                            } else {
+                                cout << "Нет еще списка студентов";
+                                Student *student = new Student;
+                                student = 0;
+                                CurGroup->student = student;
+                                AddStudent(&(CurGroup->student));
+                            }
+
+                        } else {
+                            cout << "Ошибка! Таких групп нет";
+                            break;
+                        }
+                    }
+
+
+                }
+
+
+                break;
+            }
+
+            case '4': {
+
+                break;
+            }
+
+            case '5': {
+
+                break;
+            }
+
+            case '6': {
+
+                if (GrStart->next == GrStart) {
+                    cout << "Ошибка! Нет ни одной группы!" << endl;
+                } else {
+
+                    Group *CurGroup = GrStart->next;
+
+                    while (CurGroup != GrStart) {
+
+                        cout << "Название группы:    " << CurGroup->name << endl;
+                        cout << "Код специальности:  " << CurGroup->code << endl << endl;
+                        cout << "\t Список студентов в группе: " << endl;
+
+                            if (CurGroup->student == 0){
+                                cout << "\t Нет студентов в группе" << endl;
+                                break;
+                            } else {
+
+                                ShowStudent(CurGroup->student);
+
+
+                            }
+
+                            CurGroup = CurGroup->next;
+                    }
+
+
+                }
+
+                break;
+            }
+
+            case '7': {
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    return 0;
+}
