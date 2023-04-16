@@ -77,12 +77,27 @@ int main()
             case '1': {
 
                 Group *NewGr = new Group;
-                NewGr->next = GrStart->next;
-                NewGr->prev = GrStart;
-                NewGr->student = 0;
-                GrStart->next = NewGr->next;
-                GrStart->prev = NewGr;
 
+
+                if (GrStart->next == GrStart) {
+
+                    Group *ptr = new Group;
+                    NewGr->next = GrStart;
+                    NewGr->prev = GrStart;
+                    NewGr->student = 0;
+                    GrStart->next = NewGr;
+                    GrStart->prev = NewGr->prev;
+                    ptr = NewGr;
+                } else {
+                    NewGr->next = GrStart;
+                    NewGr->prev = ptr;
+                    ptr->next = NewGr;
+                    GrStart->prev = NewGr;
+
+                }
+                cout << " NewGR = " << NewGr << " NewGr->next = " << NewGr->next << "NewGr->prev = " << NewGr->prev << endl;
+                cout << " StartGR = " << GrStart << " GrStart->next = " << GrStart->next << "GrStart->prev = " << GrStart->prev << endl;
+                //cout << "StartGr = " << GrStart;
                 cout << "Введите название группы: ";
                 (cin >> NewGr->name).get();
                 cout << "Введите код специальности: ";
@@ -163,6 +178,7 @@ int main()
 
                         cout << "Название группы:    " << CurGroup->name << endl;
                         cout << "Код специальности:  " << CurGroup->code << endl << endl;
+                        cout << "CurGroup = " << CurGroup;
                         cout << "\t Список студентов в группе: " << endl;
 
                             if (CurGroup->student == 0){
@@ -171,8 +187,6 @@ int main()
                             } else {
 
                                 ShowStudent(CurGroup->student);
-
-
                             }
 
                             CurGroup = CurGroup->next;
